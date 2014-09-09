@@ -426,6 +426,17 @@ or nil if not found."
 (define-key esc-map "S" 'spell-buffer)
 (define-key global-map "\^cw" 'copy-sexp-as-kill)
 
+(progn
+  (delete 'Git vc-handled-backends)
+  (remove-hook 'find-file-hooks 'vc-find-file-hook)
+  (if (eq system-type 'windows-nt)
+      (progn
+        (setenv "PATH" (concat "C:\\Program Files (x86)\\Git\\bin;"
+                               (getenv "PATH")))
+        (push "c:/Program Files (x86)/Git/bin" exec-path))))
+
+(require 'magit)
+
 (global-set-key [(control c) (g) (s)] 'magit-status)
 (global-set-key [(control c) (g) (b)] 'magit-blame-mode)
 (global-set-key [(control c) (g) (a)] 'git-gra)
@@ -614,7 +625,7 @@ this is meant to be called with
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(custom-enabled-themes (quote (whiteboard)))
- '(custom-safe-themes (quote ("60a65134827577812cab9974a7c368f8ad15746fb032ea4a39d0768eafb9e6e2" default)))
+ '(custom-safe-themes (quote ("89cc8d0ddb02b9528fe5f9f07bbe575865ae0e3e5d822b1e85f23bf50056e00a" "60a65134827577812cab9974a7c368f8ad15746fb032ea4a39d0768eafb9e6e2" default)))
  '(ecb-options-version "2.40")
  '(org-agenda-files (quote ("~/solo/ideas.org" "~/solo/brico.org" "~/organizer.org")))
  '(org-agenda-ndays 7)
