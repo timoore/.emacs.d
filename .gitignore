@@ -1,2 +1,10 @@
-# Compiled
+auto-save-list
+backups
+*~
+.places
+session.*
+tramp
+elpa
+swank
 *.elc
+.DS_Store
