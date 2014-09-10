@@ -8,3 +8,4 @@ elpa
 swank
 *.elc
 .DS_Store
+server

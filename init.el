@@ -1,14 +1,7 @@
 ;;; Tim Moore's .emacs file.
-(defconst running-emacs19 (if (string-match "Emacs 19" (emacs-version))
-			      t
-			    nil))
+
 ;;; XEmacs
 (defconst running-lucid (if (string-match "Lucid" (emacs-version)) t  nil))
-(defconst running-emacs19-20 (or running-emacs19
-				 (if (string-match "Emacs 2[01]"
-						   (emacs-version))
-				     t
-				   nil)))
 
 ;;; Customize the load path for my own functions.
 (setq load-path (append '( ;"/usr/share/maxima/5.27.0/emacs"
@@ -49,14 +42,25 @@ M-x compile.
 	(revert-buffer t t))
     (call-interactively 'compile)))
 
-;;; My preferred mode for Git
+;;; customization for magit
 
-;(with-demoted-errors
-;  ;(require 'egg)
-;  (load-library "egg-grep")
-;  (delete 'Git vc-handled-backends)
-;  (remove-hook 'find-file-hooks 'vc-find-file-hook)
-;  )
+;;; Find git tools
+(progn
+  (delete 'Git vc-handled-backends)
+  (remove-hook 'find-file-hooks 'vc-find-file-hook)
+  ;; TODO: handle cygwin
+  (if (eq system-type 'windows-nt)
+      (progn
+        (setenv "PATH" (concat "C:\\Program Files (x86)\\Git\\bin;"
+                               (getenv "PATH")))
+        (push "c:/Program Files (x86)/Git/bin" exec-path))))
+
+(require 'magit)
+
+(global-set-key [(control c) (g) (s)] 'magit-status)
+(global-set-key [(control c) (g) (b)] 'magit-blame-mode)
+(global-set-key [(control c) (g) (a)] 'git-gra)
+(global-set-key [(control c) (g) (g)] 'git-grep)
 
 (with-demoted-errors
   (require 'gtags))
@@ -425,23 +429,6 @@ or nil if not found."
 (define-key esc-map "s" 'spell-word)
 (define-key esc-map "S" 'spell-buffer)
 (define-key global-map "\^cw" 'copy-sexp-as-kill)
-
-(progn
-  (delete 'Git vc-handled-backends)
-  (remove-hook 'find-file-hooks 'vc-find-file-hook)
-  (if (eq system-type 'windows-nt)
-      (progn
-        (setenv "PATH" (concat "C:\\Program Files (x86)\\Git\\bin;"
-                               (getenv "PATH")))
-        (push "c:/Program Files (x86)/Git/bin" exec-path))))
-
-(require 'magit)
-
-(global-set-key [(control c) (g) (s)] 'magit-status)
-(global-set-key [(control c) (g) (b)] 'magit-blame-mode)
-(global-set-key [(control c) (g) (a)] 'git-gra)
-(global-set-key [(control c) (g) (g)] 'git-grep)
-
 
 ;;; map \^h to delete
 (setq keyboard-translate-table "\0\1\2\3\4\5\6\7\177")
