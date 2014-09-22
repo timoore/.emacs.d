@@ -602,34 +602,23 @@ this is meant to be called with
 (setq org-latex-to-pdf-process 
   '("xelatex -interaction nonstopmode %f"
      "xelatex -interaction nonstopmode %f")) ;; for multiple passes
-;;; fonts
-;;(add-to-list 'default-frame-alist '(font "Inconsolata-12"))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(custom-enabled-themes (quote (whiteboard)))
- '(custom-safe-themes (quote ("89cc8d0ddb02b9528fe5f9f07bbe575865ae0e3e5d822b1e85f23bf50056e00a" "60a65134827577812cab9974a7c368f8ad15746fb032ea4a39d0768eafb9e6e2" default)))
- '(ecb-options-version "2.40")
- '(org-agenda-files (quote ("~/solo/ideas.org" "~/solo/brico.org" "~/organizer.org")))
- '(org-agenda-ndays 7)
- '(org-agenda-repeating-timestamp-show-all nil)
- '(org-agenda-restore-windows-after-quit t)
- '(org-agenda-show-all-dates t)
- '(org-agenda-skip-deadline-if-done t)
- '(org-agenda-skip-scheduled-if-done t)
- '(org-agenda-sorting-strategy (quote ((agenda time-up priority-down tag-up) (todo tag-up))))
- '(org-agenda-start-on-weekday nil)
- '(org-agenda-todo-ignore-deadlines t)
- '(org-agenda-todo-ignore-scheduled t)
- '(org-agenda-todo-ignore-with-date t)
- '(org-agenda-window-setup (quote other-window))
- '(org-deadline-warning-days 7)
- '(org-fast-tag-selection-single-key nil)
- '(org-format-latex-header "\\documentclass{article}
+(setq org-agenda-files (quote ("~/solo/ideas.org" "~/solo/brico.org" "~/organizer.org")))
+(setq org-agenda-ndays 7)
+(setq org-agenda-repeating-timestamp-show-all nil)
+(setq org-agenda-restore-windows-after-quit t)
+(setq org-agenda-show-all-dates t)
+(setq org-agenda-skip-deadline-if-done t)
+(setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-sorting-strategy (quote ((agenda time-up priority-down tag-up) (todo tag-up))))
+(setq org-agenda-start-on-weekday nil)
+(setq org-agenda-todo-ignore-deadlines t)
+(setq org-agenda-todo-ignore-scheduled t)
+(setq org-agenda-todo-ignore-with-date t)
+(setq org-agenda-window-setup (quote other-window))
+(setq org-deadline-warning-days 7)
+(setq org-fast-tag-selection-single-key nil)
+(setq org-format-latex-header "\\documentclass{article}
 \\usepackage{fullpage}         % do not remove
 \\usepackage{amssymb}
 \\usepackage[usenames]{color}
@@ -638,17 +627,8 @@ this is meant to be called with
 \\usepackage[mathscr]{eucal}
 \\usepackage{lmodern}
 \\pagestyle{empty}             % do not remove")
- '(org-log-done (quote (done)))
- '(org-refile-targets (quote (("organizer.org" :maxlevel . 1) ("someday.org" :level . 2))))
- '(org-reverse-note-order nil)
- '(org-tags-column -78)
- '(org-use-fast-todo-selection t)
- '(safe-local-variable-values (quote ((Base . 10) (Syntax . ANSI-Common-Lisp) (eval progn (c-set-offset (quote innamespace) (quote 0)) (c-set-offset (quote inline-open) (quote 0))) (package . user) (Package . JAPANESE-GRAPHICS-EDITOR) (TeX-master . "these") (Package . USER) (TeX-master . t) (Package . GOATEE) (Package . TOOL) (Package . ACL-CLIM) (Syntax . ANSI-Common-lisp) (Package . CLIM-DEFSYSTEM) (Package . CLIM-UTILS) (package . tk) \.\.\.)))
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "Inconsolata" :foundry "unknown" :slant normal :weight normal :height 123 :width normal))))
- '(magit-item-highlight ((t nil))))
+(setq org-log-done (quote (done)))
+(setq org-refile-targets (quote (("organizer.org" :maxlevel . 1) ("someday.org" :level . 2))))
+(setq org-reverse-note-order nil)
+(setq org-tags-column -78)
+(setq org-use-fast-todo-selection t)
