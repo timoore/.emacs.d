@@ -121,30 +121,34 @@ or nil if not found."
 (global-set-key [(control c) (control f)] 'ff-find-other-file)
 
 ;;; This makes much more sense and agrees better with tools like git diff.
-(setq c-offsets-alist '((namespace-open . 0)
-                        (namespace-close . 0)
-                        (innamespace . 0)
-                        (inextern-lang . 0)))
+(setq my-c-offsets-alist '((namespace-open . 0)
+                           (namespace-close . 0)
+                           (innamespace . 0)
+                           (inextern-lang . 0)))
 
 ;;; Stroustrup, with the namespace changes above and different inline open
 
 (c-add-style "PERSONAL-C++"
-             '("stroustrup"
+             `("stroustrup"
                (c-offsets-alist
-                (inline-open . 0))))
+                (inline-open . 0)
+                ,@my-c-offsets-alist)))
 
 (c-add-style "my-gnu"
-             '("gnu"
+             `("gnu"
                (c-offsets-alist
-                (innamespace . 0))))
+                ,@my-c-offsets-alist)))
 
 (c-add-style "my-linux"
              '("linux"
                (indent-tabs-mode t)))
 
+;;; Open Inventor likes nested namespaces
 (c-add-style "inventor"
-             '("PERSONAL-C++"
-               (c-basic-offset . 2)))
+             '("stroustrup"
+               (c-basic-offset . 2)
+               (c-offsets-alist
+                (inline-open . 0))))
 
 (setq my-c++-styles-alist
       '(("OIVHOME" . "inventor")
