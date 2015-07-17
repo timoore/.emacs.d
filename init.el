@@ -515,7 +515,7 @@ or nil if not found."
 
 (require 'org)
 
-(org-remember-insinuate)
+;;(org-remember-insinuate)
 
 (setq org-directory "~/orgfiles/")
 (setq org-default-notes-file "~/orgfiles/notes.org")
@@ -584,10 +584,11 @@ this is meant to be called with
 
 ;; 'djcb-org-article' for export org documents to the LaTex 'article', using
 ;; XeTeX and some fancy fonts; requires XeTeX (see org-latex-to-pdf-process)
-(require 'org-latex)
-(add-to-list
- 'org-export-latex-classes
- '("djcb-org-article" "\\documentclass[11pt,a4paper]{article}
+(with-demoted-errors
+    (require 'org-latex)
+  (add-to-list
+   'org-export-latex-classes
+   '("djcb-org-article" "\\documentclass[11pt,a4paper]{article}
 \\usepackage{fontspec}
 \\usepackage{graphicx}
 \\usepackage{hyperref}
@@ -603,10 +604,10 @@ this is meant to be called with
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]" ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}") ("\\subsubsection{%s}" . "\\subsubsection*{%s}") ("\\paragraph{%s}" . "\\paragraph*{%s}") ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-(setq org-latex-to-pdf-process 
-  '("xelatex -interaction nonstopmode %f"
-     "xelatex -interaction nonstopmode %f")) ;; for multiple passes
-
+  (setq org-latex-to-pdf-process 
+        '("xelatex -interaction nonstopmode %f"
+          "xelatex -interaction nonstopmode %f")) ;; for multiple passes
+  )
 (setq org-agenda-files (quote ("~/solo/ideas.org" "~/solo/brico.org" "~/organizer.org")))
 (setq org-agenda-ndays 7)
 (setq org-agenda-repeating-timestamp-show-all nil)
