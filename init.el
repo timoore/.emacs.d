@@ -1,5 +1,9 @@
 ;;; Tim Moore's .emacs file.
 
+(require 'package)
+(add-to-list 'package-archives '("melpa" ."http://melpa.org/packages/") t)
+(package-initialize)
+
 ;;; XEmacs
 (defconst running-lucid (if (string-match "Lucid" (emacs-version)) t  nil))
 
@@ -58,9 +62,10 @@ M-x compile.
 (require 'magit)
 
 (global-set-key [(control c) (g) (s)] 'magit-status)
-(global-set-key [(control c) (g) (b)] 'magit-blame-mode)
+(global-set-key [(control c) (g) (b)] 'magit-blame)
 (global-set-key [(control c) (g) (a)] 'git-gra)
 (global-set-key [(control c) (g) (g)] 'git-grep)
+(global-set-key [(control c) (g) (c)] 'git-grac)
 
 (with-demoted-errors
   (require 'gtags))
@@ -200,6 +205,19 @@ or nil if not found."
                                    "git --no-pager gra ")
                                  'git-grep-history
                                  (if current-prefix-arg nil default))))))
+  (grep args))
+
+(defun git-compute-args (command)
+  (grep-compute-defaults)
+  (let ((default (grep-default-command)))
+    (list (read-shell-command "Run command (like this): "
+                              command
+                              'git-grep-history
+                              (if current-prefix-arg nil default)))))
+
+(defun git-grac (args)
+  (interactive
+   (git-compute-args "git --no-pager grac "))
   (grep args))
 
 ;;; Common Lisp and Emacs Lisp
