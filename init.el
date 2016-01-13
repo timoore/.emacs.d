@@ -1,7 +1,8 @@
 ;;; Tim Moore's .emacs file.
 
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" ."http://melpa.org/packages/") t)
+(package-initialize)
 
 ;;; XEmacs
 (defconst running-lucid (if (string-match "Lucid" (emacs-version)) t  nil))
@@ -61,9 +62,10 @@ M-x compile.
 (require 'magit)
 
 (global-set-key [(control c) (g) (s)] 'magit-status)
-(global-set-key [(control c) (g) (b)] 'magit-blame-mode)
+(global-set-key [(control c) (g) (b)] 'magit-blame)
 (global-set-key [(control c) (g) (a)] 'git-gra)
 (global-set-key [(control c) (g) (g)] 'git-grep)
+(global-set-key [(control c) (g) (c)] 'git-grac)
 
 (with-demoted-errors
   (require 'gtags))
@@ -124,30 +126,34 @@ or nil if not found."
 (global-set-key [(control c) (control f)] 'ff-find-other-file)
 
 ;;; This makes much more sense and agrees better with tools like git diff.
-(setq c-offsets-alist '((namespace-open . 0)
-                        (namespace-close . 0)
-                        (innamespace . 0)
-                        (inextern-lang . 0)))
+(setq my-c-offsets-alist '((namespace-open . 0)
+                           (namespace-close . 0)
+                           (innamespace . 0)
+                           (inextern-lang . 0)))
 
 ;;; Stroustrup, with the namespace changes above and different inline open
 
 (c-add-style "PERSONAL-C++"
-             '("stroustrup"
+             `("stroustrup"
                (c-offsets-alist
-                (inline-open . 0))))
+                (inline-open . 0)
+                ,@my-c-offsets-alist)))
 
 (c-add-style "my-gnu"
-             '("gnu"
+             `("gnu"
                (c-offsets-alist
-                (innamespace . 0))))
+                ,@my-c-offsets-alist)))
 
 (c-add-style "my-linux"
              '("linux"
                (indent-tabs-mode t)))
 
+;;; Open Inventor likes nested namespaces
 (c-add-style "inventor"
-             '("PERSONAL-C++"
-               (c-basic-offset . 2)))
+             '("stroustrup"
+               (c-basic-offset . 2)
+               (c-offsets-alist
+                (inline-open . 0))))
 
 (setq my-c++-styles-alist
       '(("OIVHOME" . "inventor")
@@ -199,6 +205,19 @@ or nil if not found."
                                    "git --no-pager gra ")
                                  'git-grep-history
                                  (if current-prefix-arg nil default))))))
+  (grep args))
+
+(defun git-compute-args (command)
+  (grep-compute-defaults)
+  (let ((default (grep-default-command)))
+    (list (read-shell-command "Run command (like this): "
+                              command
+                              'git-grep-history
+                              (if current-prefix-arg nil default)))))
+
+(defun git-grac (args)
+  (interactive
+   (git-compute-args "git --no-pager grac "))
   (grep args))
 
 ;;; Common Lisp and Emacs Lisp
@@ -494,6 +513,4 @@ or nil if not found."
 (global-set-key "\C-c5" 'my-new-screen)
 
 (setq visible-bell t)
-
-
 
