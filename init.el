@@ -273,7 +273,7 @@ or nil if not found."
 	    (local-set-key "\C-c\C-b" 'my-blink)
 	    (setq lisp-indent-function 'common-lisp-indent-function)
 	    (setq comment-column 40)
-	    (set-fill-column 79)
+	    (set-fill-column 99)
 	    (font-lock-mode)))
 
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
