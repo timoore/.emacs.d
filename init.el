@@ -15,6 +15,14 @@
 			load-path))
 
 ;;; general customizations
+
+(if (file-readable-p
+     "~/.emacs.d/emacs-color-theme-solarized/color-theme-solarized.el")
+    (progn
+      (add-to-list 'custom-theme-load-path
+                   "~/.emacs.d/emacs-color-theme-solarized")
+      (load-theme 'solarized t)))
+
 (put 'eval-expression 'disabled nil)
 (setq multi-line-comment t)
 (setq comment-multi-line t)
