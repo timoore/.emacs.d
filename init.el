@@ -36,24 +36,32 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward)
 
+;;; window and buffer navigation
 (global-set-key (kbd "C-x C-b") (lambda () (interactive) (ibuffer t)))
+(windmove-default-keybindings)
+
 (require 'compile)
+
+(setq real-compilation-last-buffer nil)
+(setq compilation-last-buffer nil)
+
 ;;; From the emacs wiki
 (global-set-key [(control c) (m)] 'compile-again)
-(setq compilation-last-buffer nil)
 (defun compile-again (pfx)
-  """Run the same compile as the last time.
+  "Run the same compile as the last time.
 
 If there was no last time, or there is a prefix argument, this acts like
-M-x compile.
-"""
+M-x compile."
   (interactive "p")
   (if (and (eq pfx 1)
-	   compilation-last-buffer)
+           real-compilation-last-buffer)
       (progn
-	(set-buffer compilation-last-buffer)
-	(revert-buffer t t))
-    (call-interactively 'compile)))
+        (set-buffer real-compilation-last-buffer)
+        (revert-buffer t t))
+      (progn
+        (call-interactively 'compile)
+        (setq real-compilation-last-buffer compilation-last-buffer))))
+
 
 ;;; customization for magit
 
@@ -258,7 +266,8 @@ or nil if not found."
 
 (if (file-exists-p "~/quicklisp/slime-helper.el")
     (progn
-      (load "~/quicklisp/slime-helper.el")))
+      (load "~/quicklisp/slime-helper.el")
+      (add-to-list 'slime-contribs 'slime-asdf)))
 
 (defun restore-slime-translations ()
   (setq slime-translate-from-lisp-filename-function
