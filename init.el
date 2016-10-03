@@ -35,15 +35,28 @@
           helm-M-x-requires-pattern nil
           helm-ff-skip-boring-files t)
     (helm-mode))
-  :bind (("C-c h" . helm-mini)
-         ("C-h a" . helm-apropos)
+  :bind (("C-h a" . helm-apropos)
          ("C-x C-b" . helm-buffers-list)
          ("C-x b" . helm-buffers-list)
          ("M-y" . helm-show-kill-ring)
          ("M-x" . helm-M-x)
          ("C-x c o" . helm-occur)
          ("C-x c s" . helm-swoop)
-         ("C-x c SPC" . helm-all-mark-rings)))
+         ("C-x c SPC" . helm-all-mark-rings)
+         ("C-x C-f" . helm-find-files)))
+
+;;; From https://tuhdo.github.io/helm-intro.html
+
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
 
 ;;; general customizations
 
