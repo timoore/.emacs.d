@@ -33,7 +33,8 @@
           helm-yas-display-key-on-candidate t
           helm-quick-update t
           helm-M-x-requires-pattern nil
-          helm-ff-skip-boring-files t)
+          helm-ff-skip-boring-files t
+          helm-buffer-max-length 40)
     (helm-mode))
   :bind (("C-h a" . helm-apropos)
          ("C-x C-b" . helm-buffers-list)
