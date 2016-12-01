@@ -32,7 +32,7 @@
 			 nil))
 		     my-remember-templates)))
 
-(global-set-key (kbd "C-S-r") 'org-remember)
+(global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)                       ;; (5)
 
 (setq org-agenda-custom-commands
@@ -137,7 +137,7 @@ this is meant to be called with
 \\usepackage{lmodern}
 \\pagestyle{empty}             % do not remove")
 (setq org-log-done (quote (done)))
-(setq org-refile-targets (quote (("organizer.org" :maxlevel . 1) ("someday.org" :level . 2))))
+(setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
 (setq org-reverse-note-order nil)
 (setq org-tags-column -78)
 (setq org-use-fast-todo-selection t)
@@ -159,4 +159,4 @@ this is meant to be called with
 (setq org-tags-exclude-from-inheritance (quote ("crypt")))
 ;;; GPG key to use for encryption
 (setq org-crypt-key "E5A885EA")
-(setq org-crypt-disable-auto-save 'encrypt)
+(setq org-crypt-disable-auto-save 't)
