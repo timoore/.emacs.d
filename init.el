@@ -14,6 +14,51 @@
 			  "~/gnu/glsl-mode")
 			load-path))
 
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(setq use-package-verbose t)
+(setq use-package-always-ensure t)
+(require 'use-package)
+
+(use-package helm
+  :diminish helm-mode
+  :init
+  (progn
+    (require 'helm-config)
+    (setq helm-candidate-number-limit 100)
+    ;; From https://gist.github.com/antifuchs/9238468
+    (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
+          helm-input-idle-delay 0.01  ; this actually updates things
+                                        ; reeeelatively quickly.
+          helm-yas-display-key-on-candidate t
+          helm-quick-update t
+          helm-M-x-requires-pattern nil
+          helm-ff-skip-boring-files t
+          helm-buffer-max-length 40)
+    (helm-mode))
+  :bind (("C-h a" . helm-apropos)
+         ("C-x C-b" . helm-buffers-list)
+         ("C-x b" . helm-buffers-list)
+         ("M-y" . helm-show-kill-ring)
+         ("M-x" . helm-M-x)
+         ("C-x c o" . helm-occur)
+         ("C-x c s" . helm-swoop)
+         ("C-x c SPC" . helm-all-mark-rings)
+         ("C-x C-f" . helm-find-files)))
+
+;;; From https://tuhdo.github.io/helm-intro.html
+
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+
 ;;; general customizations
 
 (if (file-readable-p
@@ -36,24 +81,32 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward)
 
+;;; window and buffer navigation
 (global-set-key (kbd "C-x C-b") (lambda () (interactive) (ibuffer t)))
+(windmove-default-keybindings)
+
 (require 'compile)
+
+(setq real-compilation-last-buffer nil)
+(setq compilation-last-buffer nil)
+
 ;;; From the emacs wiki
 (global-set-key [(control c) (m)] 'compile-again)
-(setq compilation-last-buffer nil)
 (defun compile-again (pfx)
-  """Run the same compile as the last time.
+  "Run the same compile as the last time.
 
 If there was no last time, or there is a prefix argument, this acts like
-M-x compile.
-"""
+M-x compile."
   (interactive "p")
   (if (and (eq pfx 1)
-	   compilation-last-buffer)
+           real-compilation-last-buffer)
       (progn
-	(set-buffer compilation-last-buffer)
-	(revert-buffer t t))
-    (call-interactively 'compile)))
+        (set-buffer real-compilation-last-buffer)
+        (revert-buffer t t))
+      (progn
+        (call-interactively 'compile)
+        (setq real-compilation-last-buffer compilation-last-buffer))))
+
 
 ;;; customization for magit
 
@@ -258,7 +311,8 @@ or nil if not found."
 
 (if (file-exists-p "~/quicklisp/slime-helper.el")
     (progn
-      (load "~/quicklisp/slime-helper.el")))
+      (load "~/quicklisp/slime-helper.el")
+      (add-to-list 'slime-contribs 'slime-asdf)))
 
 (defun restore-slime-translations ()
   (setq slime-translate-from-lisp-filename-function
@@ -460,11 +514,6 @@ or nil if not found."
 (define-key esc-map "s" 'spell-word)
 (define-key esc-map "S" 'spell-buffer)
 (define-key global-map "\^cw" 'copy-sexp-as-kill)
-
-;;; map \^h to delete
-(setq keyboard-translate-table "\0\1\2\3\4\5\6\7\177")
-(define-key global-map "\M-?" 'help-command)
-(define-key global-map "\M-?a" 'apropos)
 
 ;(setq grep-files-aliases (cons '("j" . "*.java") grep-files-aliases))
 

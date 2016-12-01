@@ -22,7 +22,13 @@
     (org-remember-insinuate))
 
 (setq org-directory "~/orgfiles/")
-(setq org-default-notes-file "~/orgfiles/notes.org")
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+
+(setq org-capture-templates
+      '(("n" "note" entry (file "")
+         "* %?\n %i")
+        ("f" "file note" entry (file "")
+         "* %?\n %i\n %a")))
 
 (setq org-remember-templates
       (apply 'append 
