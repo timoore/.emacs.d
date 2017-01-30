@@ -416,6 +416,16 @@ or nil if not found."
 (autoload 'imaxima "imaxima" "Maxima frontend" t)
 (autoload 'imath "imath" "Interactive Math mode" t)
 
+;;; Alternate fonts for imaxima
+(setq imaxima-latex-preamble "\\usepackage{libertine} \\usepackage[libertine]{newtxmath}")
+(add-hook 'imaxima-startup-hook
+          (lambda ()
+            (let ((b (get-buffer "*imaxima*"))
+                  (p (get-process "imaxima")))
+              (if (and b p)
+                  (apply comint-input-sender
+                         (list (get-process "imaxima")
+                               "load(\"mactex-utilities\");"))))))
 
 ;;; AucTeX
 ;(with-demoted-errors
