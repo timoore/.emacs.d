@@ -111,6 +111,7 @@ M-x compile."
 ;;; customization for magit
 
 ;;; Find git tools
+(when nil
 (progn
   (delete 'Git vc-handled-backends)
   (remove-hook 'find-file-hooks 'vc-find-file-hook)
@@ -120,6 +121,17 @@ M-x compile."
         (setenv "PATH" (concat "C:\\Program Files (x86)\\Git\\bin;"
                                (getenv "PATH")))
         (push "c:/Program Files (x86)/Git/bin" exec-path))))
+)
+;;; Better way to do this; currently in .emacs
+(when nil
+  (setq shell-file-name "C:/Program Files/Git/bin/bash.exe")
+  (defvar my-windows-path
+    '("C:\\Program Files\\Git\\bin" "C:\\Program Files\\Git\\usr\\bin"))
+  (setenv "PATH"
+          (apply 'concat
+                 `(,@(cl-mapcan (lambda (f) (list f ";")) my-windows-path) ,(getenv "PATH"))))
+  (setq exec-path (append my-windows-path exec-path))
+  )
 
 (require 'magit)
 
@@ -195,7 +207,7 @@ or nil if not found."
 
 ;;; Stroustrup, with the namespace changes above and different inline open
 
-(c-add-style "PERSONAL-C++"
+(c-add-style "personal-c++"
              `("stroustrup"
                (c-offsets-alist
                 (inline-open . 0)
@@ -217,8 +229,14 @@ or nil if not found."
                (c-offsets-alist
                 (inline-open . 0))))
 
+(c-add-style "unreal"
+             '("personal-c++"
+               (tab-width . 4)
+               (indent-tabs-mode t)))
+
 (setq my-c++-styles-alist
-      '(("OIVHOME" . "inventor")
+      '(("UE4Games.uprojectdirs" . "unreal")
+        ("OIVHOME" . "inventor")
         (nil . "PERSONAL-C++")))
 
 (add-hook 'c++-mode-hook
