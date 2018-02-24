@@ -170,9 +170,10 @@ or nil if not found."
   (labels
       ((find-file-r (path)
                     (let* ((parent (file-name-directory path))
-                           (possible-file (concat parent file-to-find)))
+                           (possible-file (concat parent file-to-find))
+                           (expansion (file-expand-wildcards possible-file)))
                       (cond
-                       ((file-exists-p possible-file) possible-file) ; Found
+                       (expansion (car expansion)) ; Found
                        ;; The parent of ~ is nil and the parent of / is itself.
                        ;; Thus the terminating condition for not finding the file
                        ;; accounts for both.
@@ -235,7 +236,8 @@ or nil if not found."
                (indent-tabs-mode t)))
 
 (setq my-c++-styles-alist
-      '(("UE4Games.uprojectdirs" . "unreal")
+      '(("*.uplugin" . "unreal")
+        ("UE4Games.uprojectdirs" . "unreal")
         ("OIVHOME" . "inventor")
         (nil . "PERSONAL-C++")))
 
