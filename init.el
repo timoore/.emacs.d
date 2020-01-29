@@ -239,6 +239,7 @@ or nil if not found."
       '(("*.uplugin" . "unreal")
         ("UE4Games.uprojectdirs" . "unreal")
         ("OIVHOME" . "inventor")
+        ("osgearth" . "stroustrup")
         (nil . "PERSONAL-C++")))
 
 (add-hook 'c++-mode-hook
