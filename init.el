@@ -235,11 +235,16 @@ or nil if not found."
                (tab-width . 4)
                (indent-tabs-mode t)))
 
+(c-add-style "oe"                       ;osgEarth
+             '("stroustrup"
+               (c-offsets-alist
+                (inline-open . 0))))
+
 (setq my-c++-styles-alist
       '(("*.uplugin" . "unreal")
         ("UE4Games.uprojectdirs" . "unreal")
         ("OIVHOME" . "inventor")
-        ("osgearth" . "stroustrup")
+        ("osgearth" . "oe")
         (nil . "PERSONAL-C++")))
 
 (add-hook 'c++-mode-hook
