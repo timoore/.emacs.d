@@ -247,6 +247,9 @@ or nil if not found."
         ("osgearth" . "oe")
         (nil . "PERSONAL-C++")))
 
+(setq c-noise-macro-names '("OSGEARTH_EXPORT" "VSG_DECLSPEC"))
+(c-make-noise-macro-regexps)
+
 (add-hook 'c++-mode-hook
 	  (lambda ()
             (let ((style
@@ -443,7 +446,6 @@ or nil if not found."
 (autoload 'imath "imath" "Interactive Math mode" t)
 
 ;;; Alternate fonts for imaxima
-(when nil
 (setq imaxima-latex-preamble "\\usepackage{libertine} \\usepackage[libertine]{newtxmath}")
 (add-hook 'imaxima-startup-hook
           (lambda ()
@@ -453,7 +455,6 @@ or nil if not found."
                   (apply comint-input-sender
                          (list (get-process "imaxima")
                                "load(\"mactex-utilities\");"))))))
-)
 ;;; AucTeX
 ;(with-demoted-errors
 ;  (require 'tex-site))
