@@ -49,6 +49,7 @@
 
 ;; 'djcb-org-article' for export org documents to the LaTex 'article', using
 ;; XeTeX and some fancy fonts; requires XeTeX (see org-latex-to-pdf-process)
+;;; XXX Probably very broken in recent Emacs!
 (with-demoted-errors
     (require 'org-latex)
   (add-to-list
@@ -136,15 +137,37 @@
                        (quote ((agenda time-up priority-down tag-up) )))
                       (org-deadline-warning-days 0)))))))
 (setq org-fast-tag-selection-single-key nil)
-(setq org-format-latex-header "\\documentclass{article}
-\\usepackage{fullpage}         % do not remove
-\\usepackage{amssymb}
-\\usepackage[usenames]{color}
-\\usepackage{amsmath}
-\\usepackage{latexsym}
-\\usepackage[mathscr]{eucal}
-\\usepackage{lmodern}
-\\pagestyle{empty}             % do not remove")
+;;; Hacks for doing latex preview with xelatex and different fonts
+
+(setq org-latex-packages-alist
+      '(("" "latexsym" t)
+        ("mathscr" "eucal" t)
+        ("" "breqn" t)                  ;Use by imaxima
+        ("" "libertine" t)
+        ("libertine" "newtxmath" t)
+        ;; imaxima stuff
+        "\\setkeys{breqn}{compact}"
+        "\\newcommand{\\ifrac}[2]{\\frac{#1}{#2}}"
+        "\\newcommand{\\ifracd}[2]{\\frac{#1}{#2}}"
+        "\\newcommand{\\ifracn}[2]{\\frac{#1}{#2}}"
+        "\\newcommand{\\isubscript}[2]{{#1}_{#2}}"
+        "\\newcommand{\\iexpt}[2]{{#1}^{#2}}"
+        "\\newcommand{\\isqrt}[1]{\\sqrt{#1}}"
+        ))
+(setq org-preview-latex-process-alist
+      (cons '(xelatex-svg
+              :programs ("latex" "dvisvgm")
+              :description "dvi > svg"
+              :message "you need to install the programs: latex and dvisvgm."
+              :image-input-type "xdv"
+              :image-output-type "svg"
+              :image-size-adjust (1.7 . 1.5)
+              :latex-compiler ("xelatex -no-pdf -interaction nonstopmode -output-directory %o %f")
+              :image-converter ("dvisvgm %f -n -b min -c %S -o %O"))
+            org-preview-latex-process-alist))
+
+(setq org-preview-latex-default-process 'xelatex-svg)
+
 (setq org-log-done (quote (done)))
 (setq org-log-into-drawer t)
 (setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
@@ -438,3 +461,47 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
     (if (bh/is-subproject-p)
         nil
       next-headline)))
+
+;; Paste image to orgmode https://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
+(defun my-org-screenshot ()
+  "Take a screenshot into a time stamped unique-named file in the
+  same directory as the org-buffer and insert a link to this file."
+  (interactive)
+  (org-display-inline-images)
+  (setq filename
+        (concat
+         (make-temp-name
+          (concat (file-name-nondirectory (buffer-file-name))
+                  "_imgs/"
+                  (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+  (unless (file-exists-p (file-name-directory filename))
+    (make-directory (file-name-directory filename)))
+                                        ; take screenshot
+  (if (eq system-type 'darwin)
+      (call-process "screencapture" nil nil nil "-i" filename))
+  (if (eq system-type 'gnu/linux)
+      (call-process "import" nil nil nil filename))
+                                        ; insert into file if correctly taken
+  (if (file-exists-p filename)
+      (insert (concat "[[file:" filename "]]"))))
+
+(use-package org-roam
+      :hook 
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "~/org-files/org-roam")
+      :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n b" . org-roam-switch-to-buffer)
+               ("C-c n g" . org-roam-show-graph))
+              :map org-mode-map
+              (("C-c n i" . org-roam-insert))))
+
+(require 'org-ref)
+
+(setq reftex-default-bibliography '("~/org-files/org-roam/bibliography/references.bib"))
+
+(setq org-ref-default-bibliography
+      '("~/org-files/org-roam/bibliography/references.bib"))
+
