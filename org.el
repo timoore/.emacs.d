@@ -184,7 +184,32 @@
         :html-extension "html"
         :body-only t
         :section-numbers nil
-        :table-of-contents nil)))
+        :table-of-contents nil)
+        ("obvious-dad" ;; my blog project (just a name)
+         ;; Path to org files.
+         :base-directory "~/photo/blog/_org"
+         :base-extension "org"
+         ;; Path to Jekyll Posts
+         :publishing-directory "~/photo/blog/_posts/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :headline-levels 4
+         :html-extension "html"
+         :with-toc nil
+         :body-only t
+         )
+        ("dadj" ;; my blog project (just a name)
+         ;; Path to org files.
+         :base-directory "~/photo/blog/_org"
+         :base-extension "org"
+         ;; Path to Jekyll Posts
+         :publishing-directory "~/photo/blog/_posts/"
+         :recursive t
+         :publishing-function org-jekyll-lite-publish-to-md
+         :headline-levels 4
+         :with-toc nil
+         :jekyll-layout "post"
+         )))
 
 (require 'org-crypt)
 ;;; Encrypt all entries before saving
@@ -505,3 +530,6 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
 (setq org-ref-default-bibliography
       '("~/org-files/org-roam/bibliography/references.bib"))
 
+(add-to-list 'load-path "~/jekyll-stuff/ox-jekyll-lite")
+(require 'ox-jekyll-lite)
+(setq org-jekyll-project-root "~/photo/blog/")

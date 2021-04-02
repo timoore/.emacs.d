@@ -610,4 +610,9 @@ or nil if not found."
 
 (setq visible-bell t)
 
+;;; julia fun
+(add-to-list 'load-path "/home/moore/julia/julia-repl")
+(require 'julia-repl)
+(add-hook 'julia-mode-hook 'julia-repl-mode)
+
 (server-start)
