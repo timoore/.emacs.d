@@ -613,6 +613,12 @@ or nil if not found."
 ;;; julia fun
 (add-to-list 'load-path "/home/moore/julia/julia-repl")
 (require 'julia-repl)
-(add-hook 'julia-mode-hook 'julia-repl-mode)
+(add-hook 'julia-mode-hook
+          (lambda ()
+            (julia-repl-mode)
+            (set-fill-column 99)
+            (local-set-key (kbd "TAB") 'julia-latexsub-or-indent)
+            (auto-fill-mode 1)))
+
 
 (server-start)

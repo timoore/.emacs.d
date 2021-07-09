@@ -523,6 +523,16 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
               :map org-mode-map
               (("C-c n i" . org-roam-insert))))
 
+(setq org-roam-dailies-directory "daily/")
+
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         #'org-roam-capture--get-point
+         "* %?"
+         :file-name "daily/%<%Y-%m-%d>"
+         :head "#+title: %<%Y-%m-%d>\n\n")))
+
+(require 'org-roam-protocol)
 (require 'org-ref)
 
 (setq reftex-default-bibliography '("~/org-files/org-roam/bibliography/references.bib"))
