@@ -184,6 +184,8 @@ or nil if not found."
 (add-hook 'c-mode-common-hook
 	  (lambda ()
 	    (auto-fill-mode 1)
+            ;; Into the 21st century!
+            (set-fill-column 100)
 	    (local-set-key "\r" 'newline-and-indent)
 	    (if (memq 'gtags features)
 		(gtags-mode t))
@@ -365,7 +367,7 @@ or nil if not found."
 	    (local-set-key "\C-c\C-b" 'my-blink)
 	    (setq lisp-indent-function 'common-lisp-indent-function)
 	    (setq comment-column 40)
-	    (set-fill-column 99)
+	    (set-fill-column 100)
 	    (font-lock-mode)))
 
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
@@ -616,9 +618,49 @@ or nil if not found."
 (add-hook 'julia-mode-hook
           (lambda ()
             (julia-repl-mode)
-            (set-fill-column 99)
+            (set-fill-column 100)
             (local-set-key (kbd "TAB") 'julia-latexsub-or-indent)
             (auto-fill-mode 1)))
 
+;;; browse-apropos-url from emacswiki
+
+(setq apropos-url-alist
+      '(("^gw?:? +\\(.*\\)" . ;; Google Web
+         "http://www.google.com/search?q=\\1")
+
+        ("^gl:? +\\(.*\\)" .  ;; Google Linux
+         "http://www.google.com/linux?q=\\1")
+
+        ("^gi:? +\\(.*\\)" . ;; Google Images
+         "http://images.google.com/images?sa=N&tab=wi&q=\\1")
+
+
+        ("^gt:? +\\(\\w+\\)|? *\\(\\w+\\) +\\(\\w+://.*\\)" . ;; Google Translate URL
+         "http://translate.google.com/translate?langpair=\\1|\\2&u=\\3")
+
+        ("^gt:? +\\(\\w+\\)|? *\\(\\w+\\) +\\(.*\\)" . ;; Google Translate Text
+         "http://translate.google.com/translate_t?langpair=\\1|\\2&text=\\3")
+
+        ("^ewiki:? +\\(.*\\)" . ;; Emacs Wiki Search
+         "http://www.emacswiki.org/cgi-bin/wiki?search=\\1")
+
+        ("^ewiki$" . ;; Emacs Wiki
+         "http://www.emacswiki.org")
+
+        ("^arda$" . ;; The Encyclopedia of Arda
+         "http://www.glyphweb.com/arda/")
+        ))
+
+;; Don't know if it's the best way , but it seemed to work. (Requires emacs >= 20)
+(defun browse-apropos-url (text &optional new-window)
+  (interactive (browse-url-interactive-arg "Location: "))
+  (let ((text (replace-regexp-in-string
+               "^ *\\| *$" ""
+               (replace-regexp-in-string "[ \t\n]+" " " text))))
+    (let ((url (assoc-default
+                text apropos-url-alist
+                '(lambda (a b) (let () (setq __braplast a) (string-match a b)))
+                text)))
+      (browse-url (replace-regexp-in-string __braplast url text) new-window))))
 
 (server-start)
