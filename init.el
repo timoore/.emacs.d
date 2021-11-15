@@ -1,9 +1,10 @@
 ;;; Tim Moore's .emacs file.
 
+(when  (version< emacs-version "27")
+  (load "~/.emacs.d/early-init.el")
+  (package-initialize))
+
 (require 'package)
-(add-to-list 'package-archives '("melpa" ."http://melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-(package-initialize)
 
 ;;; XEmacs
 (defconst running-lucid (if (string-match "Lucid" (emacs-version)) t  nil))
@@ -133,7 +134,7 @@ M-x compile."
   (setq exec-path (append my-windows-path exec-path))
   )
 
-(require 'magit)
+(use-package magit)
 
 (global-set-key [(control c) (g) (s)] 'magit-status)
 (global-set-key [(control c) (g) (b)] 'magit-blame)
@@ -160,8 +161,6 @@ M-x compile."
 (setq parens-require-spaces nil)
 
 ;;; From http://emacswiki.org/emacs/EmacsTags
-
-(require 'cl)
 
 (defun find-file-upwards (file-to-find)
   "Recursively searches each parent directory starting from the default-directory.
