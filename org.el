@@ -511,35 +511,44 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
       (insert (concat "[[file:" filename "]]"))))
 
 (use-package org-roam
-      :hook 
-      (after-init . org-roam-mode)
-      :custom
-      (org-roam-directory "~/org-files/org-roam")
-      :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n b" . org-roam-switch-to-buffer)
-               ("C-c n g" . org-roam-show-graph))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert))))
+  :after org
+  :init (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/org-files/org-roam")
+  :bind ((("C-c n f" . org-roam-node-find)
+          ("C-c n g" . org-roam-show-graph)
+          ("C-c n r" . org-roam-node-random))
+         :map org-mode-map
+         (("C-c n i" . org-roam-node-insert)
+          ("C-c n o" . org-id-get-create)
+          ("C-c n t" . org-roam-tag-add)
+          ("C-c n a" . org-roam-alias-add)
+          ("C-c n l" . org-roam-buffer-toggle))))
+
+(org-roam-db-autosync-mode)
 
 (setq org-roam-dailies-directory "daily/")
 
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry
-         #'org-roam-capture--get-point
          "* %?"
-         :file-name "daily/%<%Y-%m-%d>"
-         :head "#+title: %<%Y-%m-%d>\n\n")))
+         :target (file+head "%<%Y-%m-%d>.org"
+                            "#+title: %<%Y-%m-%d>\n"))))
 
 (require 'org-roam-protocol)
 (require 'org-ref)
+
+(use-package deft
+    :config
+    (setq deft-directory org-roam-directory
+          deft-recursive t
+          deft-strip-summary-regexp ":PROPERTIES:\n\\(.+\n\\)+:END:\n"
+          deft-use-filename-as-title t)
+    :bind
+    ("C-c n d" . deft))
 
 (setq reftex-default-bibliography '("~/org-files/org-roam/bibliography/references.bib"))
 
 (setq org-ref-default-bibliography
       '("~/org-files/org-roam/bibliography/references.bib"))
 
-(add-to-list 'load-path "~/jekyll-stuff/ox-jekyll-lite")
-(require 'ox-jekyll-lite)
-(setq org-jekyll-project-root "~/photo/blog/")
