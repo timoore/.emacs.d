@@ -589,8 +589,6 @@ or nil if not found."
 
 (global-set-key "\e\$" 'ispell-word)
 
-(global-set-key "\C-x\e" 'electric-command-history)
-
 ;;; For broken terminal emulators...
 (global-set-key "\^c " 'set-mark-command)
 
