@@ -6,6 +6,9 @@
 
 (require 'package)
 
+;;; Wide, tall frames
+(setq default-frame-alist '((width . 110) (height . 50)))
+
 ;;; XEmacs
 (defconst running-lucid (if (string-match "Lucid" (emacs-version)) t  nil))
 
