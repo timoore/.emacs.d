@@ -5,6 +5,7 @@
   (package-initialize))
 
 (require 'package)
+(require 'cl-lib)
 
 ;;; Wide, tall frames
 (setq default-frame-alist '((width . 110) (height . 50)))
@@ -169,7 +170,7 @@ M-x compile."
   "Recursively searches each parent directory starting from the default-directory.
 looking for a file with name file-to-find.  Returns the path to it
 or nil if not found."
-  (labels
+  (cl-labels
       ((find-file-r (path)
                     (let* ((parent (file-name-directory path))
                            (possible-file (concat parent file-to-find))
@@ -613,14 +614,19 @@ or nil if not found."
 (setq visible-bell t)
 
 ;;; julia fun
-(add-to-list 'load-path "/home/moore/julia/julia-repl")
-(require 'julia-repl)
 (add-hook 'julia-mode-hook
           (lambda ()
-            (julia-repl-mode)
             (set-fill-column 100)
             (local-set-key (kbd "TAB") 'julia-latexsub-or-indent)
             (auto-fill-mode 1)))
+
+(use-package vterm
+  :ensure t)
+
+(use-package julia-snail
+  :ensure t
+  :requires vterm
+  :hook (julia-mode . julia-snail-mode))
 
 ;;; browse-apropos-url from emacswiki
 

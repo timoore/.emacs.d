@@ -1,11 +1,13 @@
 ;;; From https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/
 
+(require 'cl-lib)
+
 (defvar lsp-packages
   '(lsp-mode yasnippet lsp-treemacs helm-lsp projectile hydra flycheck company
              avy which-key helm-xref dap-mode))
 
 (dolist (package lsp-packages)
-  (pushnew package package-selected-packages))
+  (cl-pushnew package package-selected-packages))
 
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
   (package-refresh-contents)
