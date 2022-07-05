@@ -669,4 +669,17 @@ or nil if not found."
                 text)))
       (browse-url (replace-regexp-in-string __braplast url text) new-window))))
 
+;;; using keyword-search to do the same thing
+(defun google-search (query &optional new-window)
+  "keyword-search that defaults to google."
+  (interactive
+   (list (let ((thing (keyword-search-get-query)))
+           (read-string
+	    (if thing
+		(format "google (%s): " thing)
+	      "google: ")
+	    nil nil thing))))
+  (keyword-search 'google query))
+
+(global-set-key (kbd "C-c k") 'google-search)
 (server-start)
