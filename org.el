@@ -1,6 +1,8 @@
 ;;; org mode, capture, etc.
 
-(require 'org)
+(use-package org
+  :ensure t
+  :pin gnu)
 
 (setq org-modules (append org-modules '(org-habit)))
 
