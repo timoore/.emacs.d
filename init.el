@@ -670,6 +670,8 @@ or nil if not found."
       (browse-url (replace-regexp-in-string __braplast url text) new-window))))
 
 ;;; using keyword-search to do the same thing
+(autoload 'keyword-search-get-query "keyword-search")
+
 (defun google-search (query &optional new-window)
   "keyword-search that defaults to google."
   (interactive
