@@ -28,6 +28,8 @@
 
 (setq lsp-keymap-prefix "s-c")
 
+(setq lsp-completion-enable-additional-text-edit nil)
+
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (require 'dap-cpptools)
