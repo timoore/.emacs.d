@@ -24,7 +24,7 @@
       company-minimum-prefix-length 1
       ;; clangd is fast
       lsp-idle-delay 0.1
-      lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error" "--header-insertion-decorators=0"))
+      lsp-clients-clangd-args '("-j=4" "-background-index" "-log=verbose" "--header-insertion-decorators=0"))
 
 (setq lsp-keymap-prefix "s-c")
 
