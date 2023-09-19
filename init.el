@@ -143,7 +143,7 @@ M-x compile."
 (global-set-key [(control c) (g) (b)] 'magit-blame)
 (global-set-key [(control c) (g) (a)] 'git-gra)
 (global-set-key [(control c) (g) (g)] 'git-grep)
-(global-set-key [(control c) (g) (c)] 'git-grac)
+(global-set-key [(control c) (g) (c)] 'my-magit-grep)
 
 (with-demoted-errors
   (require 'gtags))
@@ -303,6 +303,11 @@ or nil if not found."
                                  'git-grep-history
                                  (if current-prefix-arg nil default))))))
   (grep args))
+
+(defun my-magit-grep (command)
+  "git grep experiment"
+  (interactive (list (magit-read-shell-command nil "git grep --full-name -n ")))
+  (magit--shell-command command (and current-prefix-arg (magit-toplevel))))
 
 (defun git-compute-args (command)
   (grep-compute-defaults)
