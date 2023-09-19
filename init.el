@@ -29,7 +29,6 @@
   :diminish helm-mode
   :init
   (progn
-    (require 'helm-config)
     (setq helm-candidate-number-limit 100)
     ;; From https://gist.github.com/antifuchs/9238468
     (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
@@ -189,6 +188,7 @@ or nil if not found."
 	    (auto-fill-mode 1)
             ;; Into the 21st century!
             (set-fill-column 100)
+            (setq tab-width 4)
 	    (local-set-key "\r" 'newline-and-indent)
 	    (if (memq 'gtags features)
 		(gtags-mode t))
@@ -206,6 +206,7 @@ or nil if not found."
 (global-set-key [(control c) (control f)] 'ff-find-other-file)
 
 ;;; This makes much more sense and agrees better with tools like git diff.
+;;; Actually I don't like this anymore.
 (setq my-c-offsets-alist '((namespace-open . 0)
                            (namespace-close . 0)
                            (innamespace . 0)
@@ -250,7 +251,7 @@ or nil if not found."
         ("UE4Games.uprojectdirs" . "unreal")
         ("OIVHOME" . "inventor")
         ("osgearth" . "oe")
-        (nil . "PERSONAL-C++")))
+        (nil . "oe")))
 
 (setq c-noise-macro-names '("OSGEARTH_EXPORT" "VSG_DECLSPEC"))
 (c-make-noise-macro-regexps)
@@ -620,13 +621,14 @@ or nil if not found."
             (local-set-key (kbd "TAB") 'julia-latexsub-or-indent)
             (auto-fill-mode 1)))
 
-(use-package vterm
-  :ensure t)
+(unless (eq system-type 'windows-nt)
+  (use-package vterm
+    :ensure t)
 
-(use-package julia-snail
-  :ensure t
-  :requires vterm
-  :hook (julia-mode . julia-snail-mode))
+  (use-package julia-snail
+    :ensure t
+    :requires vterm
+    :hook (julia-mode . julia-snail-mode)))
 
 ;;; browse-apropos-url from emacswiki
 

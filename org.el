@@ -512,35 +512,36 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
   (if (file-exists-p filename)
       (insert (concat "[[file:" filename "]]"))))
 
-(use-package org-roam
-  :after org
-  :init (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory "~/org-files/org-roam")
-  :bind ((("C-c n f" . org-roam-node-find)
-          ("C-c n g" . org-roam-show-graph)
-          ("C-c n r" . org-roam-node-random))
-         :map org-mode-map
-         (("C-c n i" . org-roam-node-insert)
-          ("C-c n o" . org-id-get-create)
-          ("C-c n t" . org-roam-tag-add)
-          ("C-c n a" . org-roam-alias-add)
-          ("C-c n l" . org-roam-buffer-toggle))))
+(unless (eq system-type 'windows-nt)
+  (use-package org-roam
+    :after org
+    :init (setq org-roam-v2-ack t)
+    :custom
+    (org-roam-directory "~/org-files/org-roam")
+    :bind ((("C-c n f" . org-roam-node-find)
+            ("C-c n g" . org-roam-show-graph)
+            ("C-c n r" . org-roam-node-random))
+           :map org-mode-map
+           (("C-c n i" . org-roam-node-insert)
+            ("C-c n o" . org-id-get-create)
+            ("C-c n t" . org-roam-tag-add)
+            ("C-c n a" . org-roam-alias-add)
+            ("C-c n l" . org-roam-buffer-toggle))))
 
-(org-roam-db-autosync-mode)
+  (org-roam-db-autosync-mode)
 
-(setq org-roam-dailies-directory "daily/")
+  (setq org-roam-dailies-directory "daily/")
 
-(setq org-roam-dailies-capture-templates
-      '(("d" "default" entry
-         "* %?"
-         :target (file+head "%<%Y-%m-%d>.org"
-                            "#+title: %<%Y-%m-%d>\n"))))
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           "* %?"
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d>\n"))))
 
-(require 'org-roam-protocol)
-(require 'org-ref)
+  (require 'org-roam-protocol)
+  (require 'org-ref)
 
-(use-package deft
+  (use-package deft
     :config
     (setq deft-directory org-roam-directory
           deft-recursive t
@@ -549,8 +550,9 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
     :bind
     ("C-c n d" . deft))
 
-(setq reftex-default-bibliography '("~/org-files/org-roam/bibliography/references.bib"))
+  (setq reftex-default-bibliography '("~/org-files/org-roam/bibliography/references.bib"))
 
-(setq org-ref-default-bibliography
-      '("~/org-files/org-roam/bibliography/references.bib"))
+  (setq org-ref-default-bibliography
+        '("~/org-files/org-roam/bibliography/references.bib"))
 
+  )
