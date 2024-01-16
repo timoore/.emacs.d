@@ -635,6 +635,7 @@ or nil if not found."
     :requires vterm
     :hook (julia-mode . julia-snail-mode)))
 
+(global-set-key "\C-c\C-z" 'julia-snail)
 ;;; browse-apropos-url from emacswiki
 
 (setq apropos-url-alist
