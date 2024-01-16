@@ -562,4 +562,8 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
   (setq org-ref-default-bibliography
         '("~/org-files/org-roam/bibliography/references.bib"))
 
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t)
   )
