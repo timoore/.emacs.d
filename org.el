@@ -8,6 +8,9 @@
 
 (setq org-directory "~/orgfiles/")
 (setq org-default-notes-file (concat org-directory "/notes.org"))
+(if (file-exists-p "~/cesium/")
+    (setq my-diary "~/cesium/org-files/diary.org")
+  (setq my-diary (concat org-directory "diary.org")))
 
 ;; From doc.norang.ca/org-mode.html
 ;;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol
@@ -18,7 +21,7 @@
          "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :immediate-finish t)
         ("n" "note" entry (file "")
          "* %? :NOTE:\n%U\n%a\n")
-        ("j" "Journal" entry (file+datetree (concat org-directory "diary.org"))
+        ("j" "Journal" entry (file+datetree my-diary)
          "* %?\n%U\n")
         ("w" "org-protocol" entry (file "")
          "* TODO Review %c\n%U\n" :immediate-finish t)
@@ -517,7 +520,7 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
     :after org
     :init (setq org-roam-v2-ack t)
     :custom
-    (org-roam-directory "~/org-files/org-roam")
+    (org-roam-directory my-org-roam-dir)
     :bind (("C-c n f" . org-roam-node-find)
            ("C-c n g" . org-roam-show-graph)
            ("C-c n r" . org-roam-node-random)
