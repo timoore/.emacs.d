@@ -139,6 +139,8 @@ M-x compile."
 
 (use-package magit)
 
+(setq magit-define-global-key-bindings 'recommended)
+
 (global-set-key [(control c) (g) (s)] 'magit-status)
 (global-set-key [(control c) (g) (b)] 'magit-blame)
 (global-set-key [(control c) (g) (a)] 'git-gra)
