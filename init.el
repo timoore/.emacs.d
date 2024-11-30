@@ -186,12 +186,12 @@ or nil if not found."
 (add-hook 'c-mode-common-hook
 	  (lambda ()
 	    (auto-fill-mode 1)
-            ;; Into the 21st century!
-            (set-fill-column 100)
             (setq tab-width 4)
 	    (local-set-key "\r" 'newline-and-indent)
 	    (if (memq 'gtags features)
 		(gtags-mode t))
+            (if (fboundp 'eglot-insure)
+                (eglot-ensure))
             ;; Inventor stuff
             (let ((oiv-include (find-file-upwards "OIVHOME/include")))
               (when oiv-include
@@ -246,11 +246,112 @@ or nil if not found."
                (c-offsets-alist
                 (inline-open . 0))))
 
+(c-add-style "cesium-omniverse"
+             '("oe"
+               (c-basic-offset . 4)     ; Guessed value
+               (c-offsets-alist
+                (arglist-cont . 0)      ; Guessed value
+                (arglist-intro . +)     ; Guessed value
+                (block-close . 0)       ; Guessed value
+                (defun-block-intro . +) ; Guessed value
+                (defun-close . 0)       ; Guessed value
+                (inline-close . 0)      ; Guessed value
+                (innamespace . 0)       ; Guessed value
+                (member-init-cont . -2)  
+                (member-init-intro . +) ; Guessed value
+                (namespace-close . 0)   ; Guessed value
+                (statement . 0)         ; Guessed value
+                (statement-block-intro . +) ; Guessed value
+                (statement-cont . +)        ; Guessed value
+                (topmost-intro . 0)         ; Guessed value
+                (topmost-intro-cont . 0) ; Guessed value
+                (access-label . -)
+                (annotation-top-cont . 0)
+                (annotation-var-cont . +)
+                (arglist-close . c-lineup-close-paren)
+                (arglist-cont-nonempty . c-lineup-arglist)
+                (block-open . 0)
+                (brace-entry-open . 0)
+                (brace-list-close . 0)
+                (brace-list-entry . 0)
+                (brace-list-intro first c-lineup-2nd-brace-entry-in-arglist c-lineup-class-decl-init-+ +)
+                (brace-list-open . 0)
+                (c . c-lineup-C-comments)
+                (case-label . 0)
+                (catch-clause . 0)
+                (class-close . 0)
+                (class-open . 0)
+                (comment-intro . c-lineup-comment)
+                (composition-close . 0)
+                (composition-open . 0)
+                (cpp-define-intro c-lineup-cpp-define +)
+                (cpp-macro . -1000)
+                (cpp-macro-cont . +)
+                (defun-open . 0)
+                (do-while-closure . 0)
+                (else-clause . 0)
+                (extern-lang-close . 0)
+                (extern-lang-open . 0)
+                (friend . 0)
+                (func-decl-cont . +)
+                (inclass . +)
+                (incomposition . +)
+                (inexpr-class . +)
+                (inexpr-statement . +)
+                (inextern-lang . +)
+                (inher-cont . c-lineup-multi-inher)
+                (inher-intro . +)
+                (inlambda . 0)
+                (inline-open . 0)
+                (inmodule . +)
+                (knr-argdecl . 0)
+                (knr-argdecl-intro . +)
+                (label . 0)
+                (lambda-intro-cont . +)
+                (module-close . 0)
+                (module-open . 0)
+                (namespace-open . 0)
+                (objc-method-args-cont . c-lineup-ObjC-method-args)
+                (objc-method-call-cont c-lineup-ObjC-method-call-colons c-lineup-ObjC-method-call +)
+                (objc-method-intro .
+                                   [0])
+                (statement-case-intro . +)
+                (statement-case-open . 0)
+                (stream-op . c-lineup-streamop)
+                (string . -1000)
+                (substatement . +)
+                (substatement-label . 0)
+                (substatement-open . 0)
+                (template-args-cont c-lineup-template-args +))))
+
+(defun llvm-lineup-statement (langelem)
+  (let ((in-assign (c-lineup-assignments langelem)))
+    (if (not in-assign)
+        '++
+      (aset in-assign 0
+            (+ (aref in-assign 0)
+               (* 2 c-basic-offset)))
+      in-assign)))
+
+;; Add a cc-mode style for editing LLVM C and C++ code. Used by most Cesium code
+(c-add-style "llvm.org"
+             '("gnu"
+	       (fill-column . 80)
+	       (c++-indent-level . 2)
+	       (c-basic-offset . 2)
+	       (indent-tabs-mode . nil)
+	       (c-offsets-alist . ((arglist-intro . ++)
+				   (innamespace . 0)
+				   (member-init-intro . ++)
+				   (statement-cont . llvm-lineup-statement)))))
 (setq my-c++-styles-alist
-      '(("*.uplugin" . "unreal")
+      '(("cesium-native" . "llvm.org")
+        ("cesium-unreal" . "llvm.org")
+        ("*.uplugin" . "unreal")
         ("UE4Games.uprojectdirs" . "unreal")
         ("OIVHOME" . "inventor")
         ("osgearth" . "oe")
+        ("CesiumGS" . "cesium-omniverse")
         (nil . "oe")))
 
 (setq c-noise-macro-names '("OSGEARTH_EXPORT" "VSG_DECLSPEC"))
