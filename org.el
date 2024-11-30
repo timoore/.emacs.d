@@ -7,7 +7,10 @@
 (setq org-modules (append org-modules '(org-habit)))
 
 (setq org-directory "~/orgfiles/")
+(setq org-git-directory "~/org-files")
+
 (setq org-default-notes-file (concat org-directory "/notes.org"))
+(setq my-fitness-diary (concat org-git-directory "/fitness.org"))
 (if (file-exists-p "~/cesium/")
     (setq my-diary "~/cesium/org-files/diary.org")
   (setq my-diary (concat org-directory "diary.org")))
@@ -29,6 +32,8 @@
          "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
         ("p" "Phone call" entry (file "")
          "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+        ("f" "Fitness Journal" entry (file+datetree my-fitness-diary)
+         "* %?\n** warmup\n** workout\n** cooldown\n%U\n")
         ))
 
 (setq org-todo-keywords
