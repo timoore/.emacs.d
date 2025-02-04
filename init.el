@@ -143,9 +143,8 @@ M-x compile."
 
 (global-set-key [(control c) (g) (s)] 'magit-status)
 (global-set-key [(control c) (g) (b)] 'magit-blame)
-(global-set-key [(control c) (g) (a)] 'git-gra)
-(global-set-key [(control c) (g) (g)] 'git-grep)
-(global-set-key [(control c) (g) (c)] 'my-magit-grep)
+(global-set-key [(control c) (g) (a)] 'git-grep-toplevel)
+(global-set-key [(control c) (g) (g)] 'vc-git-grep)
 
 (with-demoted-errors
   (require 'gtags))
@@ -379,51 +378,20 @@ or nil if not found."
 (with-demoted-errors
   (require 'glsl-mode))
 
-(defvar git-grep-history nil "History list for git-grep.")
-
-(defun git-grep (args)
-  "Run git grep."
+(defun git-grep-toplevel (regexp &optional files)
   (interactive
    (progn
      (grep-compute-defaults)
-     (let ((default (grep-default-command)))
-       (list (read-shell-command "Run git grep (like this): "
-                                 (if current-prefix-arg default
-                                   "git --no-pager grep -n ")
-                                 'git-grep-history
-                                 (if current-prefix-arg nil default))))))
-  (grep args))
-
-(defun git-gra (args)
-  "Run git gra."
-  (interactive
-   (progn
-     (grep-compute-defaults)
-     (let ((default (grep-default-command)))
-       (list (read-shell-command "Run git gra (like this): "
-                                 (if current-prefix-arg default
-                                   "git --no-pager gra ")
-                                 'git-grep-history
-                                 (if current-prefix-arg nil default))))))
-  (grep args))
-
-(defun my-magit-grep (command)
-  "git grep experiment"
-  (interactive (list (magit-read-shell-command nil "git grep --full-name -n ")))
-  (magit--shell-command command (and current-prefix-arg (magit-toplevel))))
-
-(defun git-compute-args (command)
-  (grep-compute-defaults)
-  (let ((default (grep-default-command)))
-    (list (read-shell-command "Run command (like this): "
-                              command
-                              'git-grep-history
-                              (if current-prefix-arg nil default)))))
-
-(defun git-grac (args)
-  (interactive
-   (git-compute-args "git --no-pager grac "))
-  (grep args))
+     (cond
+      ((equal current-prefix-arg '(16))
+       (list (read-from-minibuffer "Run: " "git grep"
+				   nil nil 'grep-history)))
+      (t (let* ((regexp (grep-read-regexp))
+		(files
+                 (mapconcat #'shell-quote-argument
+                            (split-string (grep-read-files regexp)) " ")))
+	   (list regexp files))))))
+  (vc-git-grep regexp files (magit-toplevel)))
 
 ;;; Common Lisp and Emacs Lisp
 
