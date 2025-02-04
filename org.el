@@ -6,7 +6,7 @@
 
 (setq org-modules (append org-modules '(org-habit)))
 
-(setq org-directory "~/orgfiles/")
+(setq org-directory "~/org-files/")
 (setq org-git-directory "~/org-files")
 
 (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -84,7 +84,7 @@
   '("xelatex -interaction nonstopmode %f"
      "xelatex -interaction nonstopmode %f")) ;; for multiple passes
 
-(setq org-agenda-files '("~/organizer.org" "~/org-files" "~/orgfiles"))
+(setq org-agenda-files '("~/org-files/organizer.org"))
 (setq org-agenda-ndays 7)
 (setq org-agenda-repeating-timestamp-show-all nil)
 (setq org-agenda-restore-windows-after-quit t)
