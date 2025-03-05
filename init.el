@@ -13,12 +13,6 @@
 ;;; XEmacs
 (defconst running-lucid (if (string-match "Lucid" (emacs-version)) t  nil))
 
-;;; Customize the load path for my own functions.
-(setq load-path (append '( ;"/usr/share/maxima/5.27.0/emacs"
-			  "~/gnu" ;"~/gnu/egg" ;"~/gnu/imaxima-imath-1.0"
-			  "~/gnu/glsl-mode")
-			load-path))
-
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 (setq use-package-verbose t)
@@ -163,6 +157,21 @@ M-x compile."
 
 ;;; We hates it!
 (setq parens-require-spaces nil)
+
+(use-package treesit-auto
+  :init
+  (setq treesit-auto-langs '(bash cmake yaml))
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
+;;; big old bug in treesit-auto
+(let ((glsl-entry (rassoc 'glsl-ts-mode auto-mode-alist)))
+  (if (and glsl-entry (null (car glsl-entry)))
+      (rplaca glsl-entry "\\.glsl\\'")))
+
 
 ;;; From http://emacswiki.org/emacs/EmacsTags
 
@@ -377,6 +386,8 @@ or nil if not found."
 
 (with-demoted-errors
   (require 'glsl-mode))
+;;; set JSON indentation to match everybody's...
+(setq js-indent-level 2)
 
 (defun git-grep-toplevel (regexp &optional files)
   (interactive
@@ -707,6 +718,10 @@ or nil if not found."
     :hook (julia-mode . julia-snail-mode)))
 
 (global-set-key "\C-c\C-z" 'julia-snail)
+
+(use-package yaml-pro
+  :ensure t)
+
 ;;; browse-apropos-url from emacswiki
 
 (setq apropos-url-alist
