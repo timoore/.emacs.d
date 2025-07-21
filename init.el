@@ -140,6 +140,12 @@ M-x compile."
 (global-set-key [(control c) (g) (a)] 'git-grep-toplevel)
 (global-set-key [(control c) (g) (g)] 'vc-git-grep)
 
+(defun my-magit-log-branch (rev-name)
+  (interactive "srev name:")
+  (let ((oldest-ancestor (magit-git-string "oldest-ancestor" rev-name "master")))
+    (if oldest-ancestor
+        (magit-diff-range (concat oldest-ancestor "..." rev-name)))))
+
 (with-demoted-errors
   (require 'gtags))
 
@@ -377,6 +383,11 @@ or nil if not found."
               (cond ((stringp style)
                      (c-set-style style 'dont-override))
                     (t nil)))))
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode)
+                 . ("clangd" "-j=8" "-background-index" "-log=verbose" "--header-insertion-decorators=0" "--header-insertion=never"))))
 
 (setq add-log-mailing-address "timoore33@gmail.com")
 
