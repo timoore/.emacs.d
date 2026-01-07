@@ -11,6 +11,7 @@
 
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 (setq my-fitness-diary (concat org-git-directory "/fitness.org"))
+(setq shape-up-journal (concat org-git-directory "/su-journal.org"))
 (if (file-exists-p "~/cesium/")
     (setq my-diary "~/cesium/org-files/diary.org")
   (setq my-diary (concat org-directory "diary.org")))
@@ -34,7 +35,10 @@
          "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
         ("f" "Fitness Journal" entry (file+datetree my-fitness-diary)
          "* %?\n** warmup\n** workout\n** cooldown\n%U\n")
-        ))
+        ("s" "ShapeUp" plain (file+olp+datetree shape-up-journal)
+         "**** %i%?\n"
+         :time-prompt t
+         :unnarrowed t)))
 
 (setq org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
